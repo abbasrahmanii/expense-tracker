@@ -1,11 +1,11 @@
 import React, { useState, useContext } from "react";
-import { GlobalState } from "../context/GlobalState";
+import { Store } from "../context/Store";
 
-const AddTransition = () => {
+const AddTransaction = () => {
   const [text, setText] = useState("");
   const [amount, setAmount] = useState(0);
 
-  const { addTransition } = useContext(GlobalState);
+  const { dispatch } = useContext(Store);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -16,7 +16,7 @@ const AddTransition = () => {
       amount: +amount,
     };
 
-    addTransition(newTransaction);
+    dispatch({ type: "ADD_TRANSACTION", payload: newTransaction });
   };
 
   return (
@@ -25,18 +25,32 @@ const AddTransition = () => {
       <form onSubmit={onSubmit}>
         <div className="form-control">
           <label htmlFor="label">Label</label>
-          <input type="text" placeholder="Enter label..." />
+          <input
+            type="text"
+            placeholder="Enter label..."
+            onChange={(e) => {
+              setText(e.target.value);
+            }}
+          />
         </div>
         <div className="form-control">
           <label htmlFor="amount">
             (<b>-</b>/<b>+</b>)Amount &nbsp; &nbsp; [-expense , +income]
           </label>
-          <input type="number" placeholder="Enter amount..." />
+          <input
+            type="number"
+            placeholder="Enter amount..."
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
+          />
         </div>
-        <button className="btn">Add transaction</button>
+        <button className="btn" type="submit">
+          Add transaction
+        </button>
       </form>
     </>
   );
 };
 
-export default AddTransition;
+export default AddTransaction;
